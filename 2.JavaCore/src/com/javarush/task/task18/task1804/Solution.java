@@ -1,13 +1,12 @@
-package com.javarush.task.task18.task1803;
+package com.javarush.task.task18.task1804;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
 import java.util.*;
 
 /* 
-Самые частые байты
+Самые редкие байты
 */
 
 public class Solution {
@@ -22,21 +21,21 @@ public class Solution {
 
         br.close();
         fis.close();
+
         HashMap<Integer, Integer> result = new HashMap<>();
 
         for (int b : bytesAr) {
             int frequencyCurrent = Collections.frequency(bytesAr, b);
             result.put(b, frequencyCurrent);
         }
-        int maxFreq = Collections.max(result.values());
+        int minFreq = Collections.min(result.values());
         Iterator mIterator = result.entrySet().iterator();
 
         while (mIterator.hasNext()) {
             Map.Entry mapElement = (Map.Entry) mIterator.next();
-            if (mapElement.getValue().equals(maxFreq)) {
+            if (mapElement.getValue().equals(minFreq)) {
                 System.out.print(mapElement.getKey() + " ");
             }
         }
-
     }
 }
