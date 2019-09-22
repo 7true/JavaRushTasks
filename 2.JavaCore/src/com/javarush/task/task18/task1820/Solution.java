@@ -18,7 +18,7 @@ public class Solution {
             FileOutputStream fout = new FileOutputStream(fileName2);
             BufferedReader brf = new BufferedReader((new InputStreamReader(fis1, StandardCharsets.UTF_8)));
             String line = brf.readLine();
-            //System.out.println(line);
+
             String [] doubles = line.split(" ");
 
             for (int i = 0; i < doubles.length; i++) {
