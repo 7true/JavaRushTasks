@@ -8,7 +8,7 @@ public class Solution {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 String fileName = br.readLine();
                 BufferedReader brf = new BufferedReader(new FileReader(fileName));
-
+                BufferedWriter fbw = new BufferedWriter(new FileWriter(fileName, true));
                 ArrayList<String> arrString = new ArrayList<>();
 
                 String line;
@@ -45,9 +45,8 @@ public class Solution {
 
                 String s = sb.toString();
                 br.close();
-                BufferedWriter fbw = new BufferedWriter(new FileWriter(fileName, true));
-                fbw.write(s);
 
+                fbw.write(s);
                 brf.close();
                 fbw.close();
 
