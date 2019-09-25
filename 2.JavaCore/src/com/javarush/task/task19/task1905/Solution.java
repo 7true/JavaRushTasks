@@ -49,7 +49,6 @@ public class Solution {
 
         @Override
         public String getCountryCode() {
-
             String desiredObject=customer.getCountryName();
             String res = null;
             for (Map.Entry<String,String> pair : countries.entrySet()) {
