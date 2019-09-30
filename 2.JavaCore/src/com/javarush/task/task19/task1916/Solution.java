@@ -1,10 +1,9 @@
 package com.javarush.task.task19.task1916;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /* 
 Отслеживаем изменения
@@ -20,7 +19,19 @@ public class Solution {
             String fileName1 = br.readLine();
             String fileName2 = br.readLine();
 
+            BufferedReader br1 = new BufferedReader(new FileReader(fileName1));
+            BufferedReader br2 = new BufferedReader(new FileReader(fileName2));
 
+            Stack<String> file1 = new Stack<>();
+            Stack<String> file2 = new Stack<>();
+
+            while (br1.ready()) {
+                file1.push(br.readLine());
+            }
+
+            while (br2.ready()) {
+                file2.push(br.readLine());
+            }
             ArrayList<String> lines = new ArrayList();
 
         } catch (IOException e) {
