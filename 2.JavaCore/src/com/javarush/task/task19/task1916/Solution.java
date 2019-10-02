@@ -1,9 +1,7 @@
 package com.javarush.task.task19.task1916;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /* 
 Отслеживаем изменения
@@ -26,14 +24,45 @@ public class Solution {
             Stack<String> file2 = new Stack<>();
 
             while (br1.ready()) {
-                file1.push(br.readLine());
+                file1.push(br1.readLine());
             }
 
             while (br2.ready()) {
-                file2.push(br.readLine());
+                file2.push(br2.readLine());
+            }
+
+            Collections.reverse(file1);
+            Collections.reverse(file2);
+            int size1 = file1.size();
+            int size2 = file2.size();
+            String s1, s2, next;
+            for(int i = 0; file1.size () > 0 && file2.size() > 0; i++) {
+                s1 = file1.pop();
+                s2 = file2.pop();
+                if (s1.equals(s2)) {
+                    lines.add(new LineItem(Type.SAME,s1));
+                }
+                else {
+                    next = file1.pop();
+                    if (next.equals(s2)) {
+                        lines.add(new LineItem(Type.REMOVED, s1));
+                        lines.add(new LineItem(Type.SAME,next));
+                    }
+                    else {
+                        next = file2.pop();
+                        if (next.equals(s1)) {
+                            lines.add(new LineItem(Type.REMOVED, s2));
+                            lines.add(new LineItem(Type.SAME, next));
+                        }
+                    }
+                }
+                //System.out.println(file1.pop());
             }
             ArrayList<String> lines = new ArrayList();
 
+            while (lines.listIterator().hasNext()) {
+                System.out.println(lines.iterator().next());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
