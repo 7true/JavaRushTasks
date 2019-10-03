@@ -49,11 +49,13 @@ public class Solution {
                         lines.add(new LineItem(Type.SAME,next));
                     }
                     else {
+                        file1.push(next);
                         next = file2.pop();
                         if (next.equals(s1)) {
                             lines.add(new LineItem(Type.REMOVED, s2));
                             lines.add(new LineItem(Type.SAME, next));
                         }
+                        file2.push(next);
                     }
                 }
                 //System.out.println(file1.pop());
