@@ -26,14 +26,11 @@ public class Solution {
             String startTag = "<" + args[0];
             String endTag = "</" + args[0] + ">";
 
-            //System.out.println(startTag + " " + endTag);
-
             ArrayList<String> result = new ArrayList<>();
             boolean tagExist = true;
             ArrayList<Integer> startTagsPos = new ArrayList<>();
             ArrayList<Integer> endTagsPos = new ArrayList<>();
             int start = 0, end = 0, endPrev = 0;
-            ArrayList<Integer> include = new ArrayList<>();
             ArrayList<Integer> nestedTags = new ArrayList<>();
             Integer nest = 0;
             ArrayList<Integer> nestPos = new ArrayList<>();
