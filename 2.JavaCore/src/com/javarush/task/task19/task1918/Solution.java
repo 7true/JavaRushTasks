@@ -28,7 +28,6 @@ public class Solution {
 
             ArrayList<String> result = new ArrayList<>();
             boolean tagExist = true;
-
             /*while (tagExist) {
                 int start = line.indexOf(startTag);
                 int end = line.lastIndexOf(endTag);
