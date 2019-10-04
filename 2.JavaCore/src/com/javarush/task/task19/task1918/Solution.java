@@ -33,6 +33,7 @@ public class Solution {
             ArrayList<Integer> startTagsPos = new ArrayList<>();
             ArrayList<Integer> endTagsPos = new ArrayList<>();
             int start = 0, end = 0, endPrev = 0;
+            ArrayList<Integer> include = new ArrayList<>();
             ArrayList<Integer> nestedTags = new ArrayList<>();
             Integer nest = 0;
             ArrayList<Integer> nestPos = new ArrayList<>();
@@ -57,7 +58,6 @@ public class Solution {
                 endPrev = end;
                 startTagsPos.add(start++);
                 endTagsPos.add(end++);
-                //String findResult = line.substring(start,end+endTag.length());
             }
 
             ArrayList<Integer> endTagsFinal = new ArrayList<>();
@@ -85,68 +85,7 @@ public class Solution {
             for (int i = 0; i < endIndexes.size(); i++) {
                 endFinal.add(endTagsPos.get(endIndexes.get(i)));
             }
-                 /*
-                for (int k = 0; k < endTagsPos.size(); k++) {
-                    if (endTagsPos.contains(endTagsFinal.get(i)) && (!endTagsFinal1.contains(endTagsFinal.get(i)))) {
-                        endTagsFinal1.add(endTagsFinal.get(i));
-                    }
-                    else if(!endTagsFinal1.contains(endTagsPos.get(k))) {
-                        endTagsFinal1.add(endTagsPos.get(k));
-                    }
-                }*/
 
- /*
- for (int i = 0; i < endTagsPos.size(); i++) {
- for (int k = 0; i < nestPos.size(); k++) {
- int currentIndex = endTagsPos.indexOf(nestPos.get(k));
- for (int j = currentIndex; j < nestedTags.get(i); j++) {
- endTagsFinal.add(endTagsPos.get(j));
-
- }
- }*/
-
-/*
- for (int i = 0; i < startTagsPos.size() - 1; i++) {
- if (startTagsPos.get(i + 1) < endTagsPos.get(i)) {
- Integer tmp = startTagsPos.get(i);
- startTagsPos.set(i, startTagsPos.get(i+1));
- startTagsPos.set(i + 1,tmp);
- }
- //result.add(line.substring(startTagsPos.get(i), endTagsPos.get(i)));
- }*/
-
- /*
- Iterator<String> it = result.iterator();
- while (it.hasNext()) {
- System.out.println(it.next());
- }*/
-/*
-            Iterator<Integer> it = startTagsPos.iterator();
-            while (it.hasNext()) {
-                System.out.print(it.next() + " ");
-            }
-            System.out.println("\n######");
-            it = endTagsPos.iterator();
-            while (it.hasNext()) {
-                System.out.print(it.next() + " ");
-            }
-            System.out.println("\n######");/*
-            for (int i = 0; i < nestedTags.size(); i++) {
-                System.out.println(nestedTags.get(i));
-                System.out.println(nestPos.get(i));
-            }
-            System.out.println("\n######");
-            it = endTagsFinal.iterator();
-            while (it.hasNext()) {
-                System.out.print(it.next() + " ");
-            }
-
-            System.out.println("\n######");
-            it = endFinal.iterator();
-            while (it.hasNext()) {
-                System.out.print(it.next() + " ");
-            }
-            System.out.println("\n######");*/
             for(int i = 0; i < startTagsPos.size(); i++) {
                 System.out.println(line.substring(startTagsPos.get(i), endFinal.get(i) + +endTag.length()));
             }
