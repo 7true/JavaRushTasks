@@ -33,7 +33,7 @@ public class Solution {
         ArrayList<String> fileContent = new ArrayList<>();
         try {
             BufferedReader fr = new BufferedReader(new FileReader(br.readLine()));
-            br.close();;
+            br.close();
             while (fr.ready()) {
                 fileContent.add(fr.readLine());
             }
@@ -51,7 +51,8 @@ public class Solution {
                     if (map.containsKey(Integer.valueOf(words[i]))) {
                         //System.out.println(map.get(Integer.valueOf(words[i])));
                         //System.out.println(words[i]);
-                        s = s.replaceFirst(words[i], map.get(Integer.valueOf(words[i])));
+                        //s = s.replaceFirst(words[i], map.get(Integer.valueOf(words[i])));
+                        s=s.replaceAll("\\b"+words[i]+"\\b",map.get(Integer.valueOf(words[i])));
                     }
             }
             System.out.println(s);
