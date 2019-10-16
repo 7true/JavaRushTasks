@@ -68,10 +68,32 @@ public class Solution {
 
         public void save(OutputStream outputStream) throws Exception {
             //implement this method - реализуйте этот метод
+            PrintWriter pw = new PrintWriter(outputStream);
+            String hasName = this.name != null ? "yes" : "no";
+            if (hasName.equals("yes")) {
+                pw.println(this.name);
+                if (!this.assets.isEmpty()) {
+                    int i = 0;
+                    while (i < assets.size()) {
+                        pw.println(this.assets.get(i).getName());
+                        pw.println(this.assets.get(i).getPrice());
+                        i++;
+                    }
+                }
+            }
+
+
+            pw.close();
         }
 
         public void load(InputStream inputStream) throws Exception {
             //implement this method - реализуйте этот метод
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+            this.name = br.readLine();
+            while (br.ready()) {
+                this.assets.add(new Asset(br.readLine()));
+            }
+
         }
     }
 }
