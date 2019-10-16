@@ -89,11 +89,15 @@ public class Solution {
         public void load(InputStream inputStream) throws Exception {
             //implement this method - реализуйте этот метод
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-            this.name = br.readLine();
-            while (br.ready()) {
-                this.assets.add(new Asset(br.readLine()));
+            String hasName = br.readLine();
+            if (hasName.equals("yes")) {
+                this.name = br.readLine();
+                String asset;
+                while ((asset = br.readLine()) != null) {
+                    this.assets.add(new Asset(asset, Double.parseDouble(br.readLine())));
+                }
             }
-
+            br.close();
         }
     }
 }
