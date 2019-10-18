@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /* 
 Читаем и пишем в файл: Human
@@ -12,7 +13,7 @@ public class Solution {
     public static void main(String[] args) {
         //исправьте outputStream/inputStream в соответствии с путем к вашему реальному файлу
         try {
-            File your_file_name = File.createTempFile("your_file_name", null);
+            File your_file_name = File.createTempFile("/home/ya/insert", null);
             OutputStream outputStream = new FileOutputStream(your_file_name);
             InputStream inputStream = new FileInputStream(your_file_name);
 
@@ -24,7 +25,12 @@ public class Solution {
             somePerson.load(inputStream);
             inputStream.close();
             //check here that ivanov equals to somePerson - проверьте тут, что ivanov и somePerson равны
-
+            //System.out.println(ivanov.name + ivanov.assets);
+           // System.out.println(somePerson.name  + somePerson.assets);
+            if (ivanov.equals(somePerson)) {
+                System.out.println("ok");
+                System.out.println(ivanov.assets + " " + ivanov.name);
+            }
         } catch (IOException e) {
             //e.printStackTrace();
             System.out.println("Oops, something wrong with my file");
@@ -55,8 +61,8 @@ public class Solution {
 
             Human human = (Human) o;
 
-            if (name != null ? !name.equals(human.name) : human.name != null) return false;
-            return assets != null ? assets.equals(human.assets) : human.assets == null;
+            if (!Objects.equals(name, human.name)) return false;
+            return Objects.equals(assets, human.assets);
         }
 
         @Override
@@ -68,20 +74,23 @@ public class Solution {
 
         public void save(OutputStream outputStream) throws Exception {
             //implement this method - реализуйте этот метод
-            PrintWriter pw = new PrintWriter(outputStream);
+            PrintStream pw = new PrintStream(outputStream);
             String hasName = this.name != null ? "yes" : "no";
-            if (hasName.equals("yes")) {
-                pw.println(this.name);
-                if (!this.assets.isEmpty()) {
-                    int i = 0;
-                    while (i < assets.size()) {
-                        pw.println(this.assets.get(i).getName());
-                        pw.println(this.assets.get(i).getPrice());
-                        i++;
-                    }
-                }
+            String isAssert = assets.size() > 0 ? "yes" : "no" ;
+
+            pw.println(hasName);
+            pw.println(isAssert);
+
+            if (hasName.equals("yes")){
+                pw.println(name);
             }
 
+            if (isAssert.equals("yes")) {
+                for (Asset asset : assets) {
+                    pw.println(asset.getName());
+                    pw.println(asset.getPrice());
+                }
+            }
 
             pw.close();
         }
@@ -90,12 +99,14 @@ public class Solution {
             //implement this method - реализуйте этот метод
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             String hasName = br.readLine();
+            String hasAsset = br.readLine();
             if (hasName.equals("yes")) {
                 this.name = br.readLine();
                 String asset;
-                while ((asset = br.readLine()) != null) {
-                    this.assets.add(new Asset(asset, Double.parseDouble(br.readLine())));
-                }
+                if (hasAsset.equals("yes"))
+                    while ((asset = br.readLine()) != null) {
+                        this.assets.add(new Asset(asset, Double.parseDouble(br.readLine())));
+                    }
             }
             br.close();
         }
