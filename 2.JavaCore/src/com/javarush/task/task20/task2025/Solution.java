@@ -47,6 +47,7 @@ public class Solution {
         return true;
     }
 
+
     public static void main(String[] args) {
         long result [] = getNumbers(1000);
         for (long l : result) {
