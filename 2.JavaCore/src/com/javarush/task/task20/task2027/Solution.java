@@ -1,5 +1,6 @@
 package com.javarush.task.task20.task2027;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /* 
@@ -23,7 +24,47 @@ same - (1, 1) - (4, 1)
     }
 
     public static List<Word> detectAllWords(int[][] crossword, String... words) {
+        ArrayList <String> arrWordsHorizont = new ArrayList();
+        ArrayList <String> arrWordsVertical = new ArrayList();
+        ArrayList <String> arrWordsDiagDown = new ArrayList();
+        ArrayList <String> arrWordsDiagUp = new ArrayList();
+        StringBuilder sbH = new StringBuilder();
+        StringBuilder sbV = new StringBuilder();
+        StringBuilder sbD = new StringBuilder();
+        for (int i = 0; i < crossword.length; i++) {
+            for (int j = 0; j < crossword[i].length; j++) {
+                sbH.append((char)crossword[i][j]);
+            }
+            arrWordsHorizont.add(sbH.toString());
+            sbH.delete(0, sbH.length());
+            for (int k = 0; k < crossword.length; k++) {
+                sbV.append((char) crossword[k][i]);
+            }
+            arrWordsVertical.add(sbV.toString());
+            sbV.delete(0, sbV.length());
+            for (int r = 0; i + r < crossword.length; r++) {
+                sbD.append((char) crossword[i+r][r]);
+            }
+            arrWordsDiagDown.add(sbD.toString());
+            sbD.delete(0, sbD.length());
+            for (int r = 0; i + r < crossword.length; r++) {
+                sbD.append((char) crossword[r][i+r]);
+            }
+            arrWordsDiagDown.add(sbD.toString());
+            sbD.delete(0, sbD.length());
+        }
 
+        for (String s : arrWordsHorizont) {
+            System.out.println(s);
+        }
+        System.out.println("########");
+        for (String s : arrWordsVertical) {
+            System.out.println(s);
+        }
+        System.out.println("########");
+        for (String s : arrWordsDiagDown) {
+            System.out.println(s);
+        }
         return null;
     }
 
