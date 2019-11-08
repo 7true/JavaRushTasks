@@ -2,7 +2,7 @@ package com.javarush.task.task20.task2021;
 
 import java.io.*;
 
-/* 
+/*
 Сериализация под запретом
 */
 public class Solution implements Serializable {
