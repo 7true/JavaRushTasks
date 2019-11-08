@@ -1,6 +1,7 @@
 package com.javarush.task.task20.task2020;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.logging.Logger;
 
 /* 
@@ -17,15 +18,15 @@ public class Solution {
         FEMALE
     }
 
-    public static class Person {
-        final String greeting;
+    public static class Person  implements Serializable {
+        transient final String greeting;
         String firstName;
         String lastName;
-        String fullName;
+        transient String fullName;
         String country;
         Sex sex;
-        PrintStream outputStream;
-        Logger logger;
+        transient PrintStream outputStream;
+        transient Logger logger;
 
         Person(String firstName, String lastName, String country, Sex sex) {
             this.firstName = firstName;
