@@ -5,6 +5,7 @@ import java.io.*;
 /* 
 Переопределение сериализации в потоке
 */
+
 public class Solution implements Serializable, AutoCloseable {
     private String fileName;
     private transient FileOutputStream stream;
