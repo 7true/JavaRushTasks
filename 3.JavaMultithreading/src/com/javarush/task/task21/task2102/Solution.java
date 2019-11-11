@@ -25,7 +25,6 @@ public class Solution {
         for (Method method : methods) {
             if (method.getName().equalsIgnoreCase("main")) return method;
         }
-
         return null;
     }
 }
