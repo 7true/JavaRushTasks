@@ -13,11 +13,12 @@ public class Solution {
 
         int methodModifiers = getMainMethod().getModifiers();
         //System.out.println(isModifierSet(methodModifiers, Modifier.STATIC));      //true
+
     }
 
     public static boolean isModifierSet(int allModifiers, int specificModifier) {
-        System.out.println(Integer.toBinaryString(allModifiers));
-        return false;
+        //System.out.println(Integer.toBinaryString(allModifiers));
+        return (allModifiers & specificModifier) == specificModifier;
     }
 
     private static Method getMainMethod() {
