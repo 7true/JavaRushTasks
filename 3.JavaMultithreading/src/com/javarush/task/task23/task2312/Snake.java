@@ -15,6 +15,21 @@ public class Snake {
         isAlive = true;
     }
 
+    void checkBody(SnakeSection head) {
+        if (sections.contains(head)) {
+            isAlive = false;
+        }
+    }
+
+    void checkBorders(SnakeSection head) {
+        int y = head.getY();
+        int x = head.getX();
+        if (x >= Room.game.getWidth() || y >= Room.game.getHeight() ||
+                x < 0 || y < 0) {
+            isAlive = false;
+        }
+    }
+
     public List<SnakeSection> getSections() {
         return sections;
     }
@@ -39,7 +54,31 @@ public class Snake {
         return sections.get(0).getY();
     }
 
-    void move() {
-        
+    public void move() {
+        if (isAlive == false) return;
+        switch (direction) {
+            case UP:
+                move(0, -1);
+            case RIGHT:
+                move(1, 0);
+            case DOWN:
+                move(0, 1);
+            case LEFT:
+                move(-1, 0);
+        }
+    }
+
+    public void move(int dx, int dy) {
+        SnakeSection head = new SnakeSection(sections.get(0).getX() + dx, sections.get(0).getY() + dy);
+        checkBorders(head);
+        checkBody(head);
+        if (isAlive == false) return;
+        sections.add(0, head);
+        if (Room.game.getMouse().getX() == head.getX() &&
+                Room.game.getMouse().getY() == head.getY()) {
+            Room.game.eatMouse();
+        } else {
+            sections.remove(sections.size()-1);
+        }
     }
 }
