@@ -41,20 +41,6 @@ public class Room {
     public void setHeight(int height) {
         this.height = height;
     }
-    private int initialDelay = 520;
-    private int delayStep = 20;
-
-    public static void main(String[] args) {
-        game = new Room(20, 20, new Snake(10, 10));
-        game.snake.setDirection(SnakeDirection.DOWN);
-        game.createMouse();
-        game.print();
-        game.run();
-    }
-
-    public int getHeight() {
-        return height;
-    }
 
     public void setSnake(Snake snake) {
         this.snake = snake;
@@ -151,6 +137,19 @@ public class Room {
         int y = (int) (Math.random() * height);
 
         mouse = new Mouse(x, y);
+    }
+    private int initialDelay = 520;
+    private int delayStep = 20;
+
+    public static void main(String[] args) {
+        game = new Room(20, 20, new Snake(10, 10));
+        game.snake.setDirection(SnakeDirection.DOWN);
+        game.createMouse();
+        game.run();
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     /**
