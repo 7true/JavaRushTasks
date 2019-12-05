@@ -10,9 +10,22 @@ public class Solution implements Action {
 
     private Action solutionAction = new Action() {
         //!!!!! Изменения могут быть тут
-
+        
         public void someAction() {
             //!!!!! Все изменения должны быть только тут
+
+            if (param > 0) {
+                FirstClass firstClass = new FirstClass() {
+                    @Override
+                    public Action getDependantAction() {
+                        return null;
+                    }
+                };
+                firstClass.someAction();
+            } else {
+                SecondClass secondClass = new SecondClass();
+                secondClass.someAction();
+            }
         }
     };
 
