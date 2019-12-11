@@ -11,7 +11,7 @@ class B {
     static boolean[] used = new boolean[graph.length];
 
     public static void main(String[] args) throws Exception {
-        bfs(4);
+        dfs(4);
     }
 
 
@@ -84,7 +84,7 @@ class B {
         graph[5].add(2);
         graph[5].add(3);
         for (int i = 0; i < graph.length; i++) {
-            //System.out.println(graph[i]);
+            System.out.println(graph[i]);
         }
         return graph;
     }
