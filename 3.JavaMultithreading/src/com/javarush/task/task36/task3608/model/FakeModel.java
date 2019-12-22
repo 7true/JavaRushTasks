@@ -32,8 +32,16 @@ public class FakeModel implements Model {
 
     @Override
     public void loadUserById(long userId) {
-        UserService userService = new UserServiceImpl();
-        User user = userService.getUsersById(userId);
-        modelData.setActiveUser(user);
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteUserById(long id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void changeUserData(String name, long id, int level) {
+        throw new UnsupportedOperationException();
     }
 }
