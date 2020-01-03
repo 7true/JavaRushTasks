@@ -1,7 +1,10 @@
 package com.javarush.task.task29.task2909.human;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 public class University {
     private String name;
@@ -37,16 +40,22 @@ public class University {
         this.age = age;
     }
     public Student getStudentWithAverageGrade(double averageGrade) {
-        //TODO:
-        return null;
+    Stream <Student> sStream = students.stream();
+    return sStream
+            .filter(st -> st.getAverageGrade() == averageGrade)
+            .findAny().get();
     }
 
     public Student getStudentWithMaxAverageGrade() {
-        //TODO:
-        return null;
+        Stream <Student> sStream = students.stream();
+        return sStream.max(Comparator.comparingDouble(Student::getAverageGrade)).get();
     }
 
-    public void getStudentWithMinAverageGradeAndExpel() {
-        //TODO:
+    public Student getStudentWithMinAverageGrade() {
+        Stream <Student> sStream = students.stream();
+        return sStream.min(Comparator.comparingDouble(Student::getAverageGrade)).get();
+    }
+    public void expel(Student student) {
+        students.remove(student);
     }
 }
