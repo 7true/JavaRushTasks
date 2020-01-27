@@ -2,6 +2,8 @@ package com.javarush.task.task30.task3008.client;
 
 import com.javarush.task.task30.task3008.Connection;
 import com.javarush.task.task30.task3008.ConsoleHelper;
+import com.javarush.task.task30.task3008.Message;
+import com.javarush.task.task30.task3008.MessageType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,34 +30,41 @@ public class Client {
     }
 
     protected String getServerAddress() {
-        String address = null;
         ConsoleHelper.writeMessage("Enter server name please: ");
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-        String line;
-        while(!checkIPv4(line = br.readLine())) {
-
-        }
-        address = line;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String address = ConsoleHelper.readString();
         return address;
     }
 
     protected int getServerPort() {
-        int port = 7777;
-        ConsoleHelper.writeMessage("Enter port:");
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-            port = Integer.parseInt(br.readLine());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        int port = ConsoleHelper.readInt();
         return port;
     }
 
+    protected String getUserName() {
+        String userName = ConsoleHelper.readString();
+        return userName;
+    }
+
+    protected boolean shouldSendTextFromConsole() {
+        return true;
+    }
+
+    protected SocketThread getSocketThread() {
+        SocketThread socketThread = new SocketThread();
+        return socketThread;
+    }
+
+    protected void sendTextMessage(String text) {
+        try {
+            Message message = new Message(MessageType.TEXT, text);
+            connection.send(message);
+        } catch (IOException e) {
+            ConsoleHelper.writeMessage("Failed to connect to server");
+            clientConnected = false;
+        }
+    }
     public class SocketThread extends Thread {
 
     }
-
 
 }
