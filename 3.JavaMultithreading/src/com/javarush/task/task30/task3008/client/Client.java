@@ -63,8 +63,75 @@ public class Client {
             clientConnected = false;
         }
     }
+    public static void main(String[] args) {
+        Client client = new Client();
+        client.run();
+    }
+
+    protected void clientHandshake() throws IOException, ClassNotFoundException {
+        while(true) {
+            Message message = connection.receive();
+            switch (message.getType()) {
+                case NAME_REQUEST:
+                    connection.send(new Message(MessageType.USER_NAME, getUserName()));
+                    break;
+                case NAME_ACCEPTED:
+                    notifyConnectionStatusChanged(true);
+                    return;
+                default:
+                    throw new IOException("Unexpected MeassageType");
+            }
+        }
+    }
+
+    public void run() {
+        SocketThread socketThread = getSocketThread();
+        socketThread.setDaemon(true);
+        socketThread.start();
+        synchronized (this) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                ConsoleHelper.writeMessage("Client start exception");
+            }
+        }
+        if (clientConnected) {
+            ConsoleHelper.writeMessage("Соединение установлено. Для выхода наберите команду 'exit'");
+        } else {
+            ConsoleHelper.writeMessage("Произошла ошибка во время работы клиента.");
+        }
+
+        while (clientConnected) {
+            String line = ConsoleHelper.readString();
+            if (line.equals("exit")) {
+                clientConnected = false;
+            }
+            if (shouldSendTextFromConsole()) {
+                sendTextMessage(line);
+            }
+        }
+    }
+
     public class SocketThread extends Thread {
 
+        protected void processIncomingMessage(String message) {
+            ConsoleHelper.writeMessage(message);
+        }
+
+        protected void informAboutAddingNewUser(String userName) {
+            ConsoleHelper.writeMessage("Участник " + userName + " присоединился к чату.");
+        }
+
+        protected  void informAboutDeletingNewUser(String userName) {
+            ConsoleHelper.writeMessage("Участник с именем " + userName + " покинул чат.");
+        }
+
+        protected  void notifyConnectionStatusChanged(boolean clientConnected) {
+            Client.this.clientConnected = clientConnected;
+            synchronized (Client.this) {
+                Client.this.notify();
+            }
+        }
     }
 
 }
