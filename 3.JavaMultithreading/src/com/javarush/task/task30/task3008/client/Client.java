@@ -68,21 +68,7 @@ public class Client {
         client.run();
     }
 
-    protected void clientHandshake() throws IOException, ClassNotFoundException {
-        while(true) {
-            Message message = connection.receive();
-            switch (message.getType()) {
-                case NAME_REQUEST:
-                    connection.send(new Message(MessageType.USER_NAME, getUserName()));
-                    break;
-                case NAME_ACCEPTED:
-                    notifyConnectionStatusChanged(true);
-                    return;
-                default:
-                    throw new IOException("Unexpected MeassageType");
-            }
-        }
-    }
+
 
     public void run() {
         SocketThread socketThread = getSocketThread();
@@ -130,6 +116,63 @@ public class Client {
             Client.this.clientConnected = clientConnected;
             synchronized (Client.this) {
                 Client.this.notify();
+            }
+        }
+
+        protected void clientHandshake() throws IOException, ClassNotFoundException {
+            while(true) {
+                Message message = connection.receive();
+                if (message.getType() == null) {
+                    throw new IOException("Unexpected MessageType");
+                }
+                switch (message.getType()) {
+                    case NAME_REQUEST:
+                        connection.send(new Message(MessageType.USER_NAME, getUserName()));
+                        break;
+                    case NAME_ACCEPTED:
+                        notifyConnectionStatusChanged(true);
+                        return;
+                    default:
+                        throw new IOException("Unexpected MessageType");
+                }
+            }
+        }
+
+        protected void clientMainLoop() throws IOException, ClassNotFoundException {
+            while (true) {
+                Message message = connection.receive();
+                if (message.getType() == null) {
+                    throw new IOException("Unexpected MessageType");
+                }
+                switch (message.getType()) {
+                    case TEXT:
+                        processIncomingMessage(message.getData());
+                        break;
+                    case USER_ADDED:
+                        informAboutAddingNewUser(message.getData());
+                        break;
+                    case USER_REMOVED:
+                        informAboutDeletingNewUser(message.getData());
+                        break;
+                    default:
+                        throw new IOException("Unexpected MessageType");
+                }
+            }
+        }
+
+        public void run() {
+            String address = getServerAddress();
+            int port = getServerPort();
+            try {
+                Socket socket = new Socket(address, port);
+                Connection connection = new Connection(socket);
+                Client.this.connection = connection;
+                clientHandshake();
+                clientMainLoop();
+            } catch (ClassNotFoundException e) {
+                notifyConnectionStatusChanged(false);
+            } catch (IOException e) {
+                notifyConnectionStatusChanged(false);
             }
         }
     }
