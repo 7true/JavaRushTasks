@@ -36,11 +36,13 @@ public class Client {
     }
 
     protected int getServerPort() {
+        ConsoleHelper.writeMessage("Enter server port please: ");
         int port = ConsoleHelper.readInt();
         return port;
     }
 
     protected String getUserName() {
+        ConsoleHelper.writeMessage("Enter your userName: ");
         String userName = ConsoleHelper.readString();
         return userName;
     }

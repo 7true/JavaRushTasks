@@ -47,9 +47,11 @@ public class BotClient extends Client {
             ConsoleHelper.writeMessage(message);
             String[] nameAndMessage = message.split(": ", 2);
             if (nameAndMessage.length == 2) {
+
                 SimpleDateFormat sdf;
                 Calendar c = Calendar.getInstance();
                 String date;
+
                 switch (nameAndMessage[1]) {
                     case "дата":
                         sdf = new SimpleDateFormat("d.MM.YYYY");
