@@ -32,14 +32,14 @@ public class Solution {
             return this.name;
         }
 
-        public void bow(Friend bower) {
+        public synchronized void bow(Friend bower) {
             System.out.format("%s: %s"
                             + " bowed to me!%n",
                     this.name, bower.getName());
             bower.bowBack(this);
         }
 
-        public void bowBack(Friend bower) {
+        public synchronized void bowBack(Friend bower) {
             System.out.format("%s: %s"
                             + " bowed back to me!%n",
                     this.name, bower.getName());
