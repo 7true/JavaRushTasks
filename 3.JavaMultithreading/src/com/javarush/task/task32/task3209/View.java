@@ -93,10 +93,25 @@ public class View extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-
-    }
-
-    public void selectedTabChanged() {
+        String actionCommand = actionEvent.getActionCommand();
+        switch (actionCommand) {
+            case "Новый":
+                controller.createNewDocument();
+                break;
+            case "Открыть":
+                controller.openDocument();
+                break;
+            case "Сохранить":
+                controller.saveDocument();
+                break;
+            case "Сохранить как...":
+                controller.saveDocumentAs();
+                break;
+            case "Выход":
+                controller.exit();
+            case "О программе":
+                showAbout();
+        }
     }
 
     public boolean canRedo() {
@@ -142,5 +157,16 @@ public class View extends JFrame implements ActionListener {
 
     public void showAbout() {
         JOptionPane.showMessageDialog(getContentPane(), "Version 0.1", "About info", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void selectedTabChanged() {
+        switch (tabbedPane.getSelectedIndex()) {
+            case 0:
+                controller.setPlainText(plainTextPane.getText());
+                break;
+            case 1:
+                plainTextPane.setText(controller.getPlainText());
+        }
+        resetUndo();
     }
 }
