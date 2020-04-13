@@ -15,6 +15,13 @@ public class Order {
         this.dishes = ConsoleHelper.getAllDishesForOrder();
     }
 
+    public int getTotalCookingTime() {
+        int cookingTime = 0;
+        for (Dish d : dishes) {
+            cookingTime += d.getDuration();
+        }
+        return cookingTime;
+    }
     @Override
     public String toString() {
         if (dishes.size() == 0) {
@@ -24,9 +31,13 @@ public class Order {
         for (Dish d : dishes) {
             stringOrder = stringOrder + d.toString() + ", ";
         }
-        stringOrder = stringOrder.trim().substring(0, stringOrder.length() - 1);
+        stringOrder = stringOrder.substring(0, stringOrder.length() - 2);
         stringOrder = stringOrder + "] of " + tablet;
 
         return stringOrder;
+    }
+
+    public boolean isEmpty() {
+        return dishes.size() == 0 ? true : false;
     }
 }
