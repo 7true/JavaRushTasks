@@ -1,36 +1,38 @@
 package com.javarush.task.task27.task2712.ad;
 
 import com.javarush.task.task27.task2712.ConsoleHelper;
+import com.javarush.task.task27.task2712.statistic.StatisticManager;
+import com.javarush.task.task27.task2712.statistic.event.NoAvailableVideoEventDataRow;
+import com.javarush.task.task27.task2712.statistic.event.VideoSelectedEventDataRow;
 
 import java.util.*;
 
 public class AdvertisementManager {
     private final AdvertisementStorage storage = AdvertisementStorage.getInstance();
-    List<Advertisement> advForTablet = new ArrayList<>();
-    long bestPrice;
+    List<Advertisement> advWithHits = new ArrayList<>();
     private int timeSeconds;
-    int maxWeight = timeSeconds;
+    private long bestPrice;
     private List<Advertisement> bestItems = new ArrayList<>();
+    private int maxWeight;
     public AdvertisementManager(int timeSeconds) {
         this.timeSeconds = timeSeconds;
     }
 
-    public List<Advertisement> processVideos() {
+    public void processVideos() {
         List<Advertisement> advList = storage.list();
-        List<Advertisement> advWithHits = new ArrayList<>();
+        maxWeight = timeSeconds;
+
         if (advList.isEmpty()) {
             throw new NoVideoAvailableException();
         }
         for (Advertisement advertisement : advList) {
-            if (advertisement.getHits() > 0) advWithHits.add(advertisement);
+            if (advertisement.getHits() > 0) {
+                advWithHits.add(advertisement);
+            }
         }
 
         makeAllSets(advWithHits);
 
-        for (Advertisement adv : bestItems) {
-            adv.revalidate();
-            ConsoleHelper.writeMessage(adv.toString());
-        }
         bestItems.sort(new Comparator<Advertisement>() {
             @Override
             public int compare(Advertisement o1, Advertisement o2) {
@@ -42,8 +44,22 @@ public class AdvertisementManager {
                 return o2.getDuration() - o1.getDuration();
             }
         }));
+        if (bestItems.isEmpty()) {
+            StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(timeSeconds));
+        } else {
+            long totalAmount = 0;
+            int totalDuration = 0;
+            for (Advertisement ad : bestItems) {
+                totalAmount += ad.getAmountPerOneDisplaying();
+                totalDuration += ad.getDuration();
+            }
+            StatisticManager.getInstance().register(new VideoSelectedEventDataRow(bestItems, totalAmount, totalDuration));
+        }
 
-        return bestItems;
+        for (Advertisement adv : bestItems) {
+            adv.revalidate();
+            ConsoleHelper.writeMessage(adv.toString());
+        }
 
     }
 
@@ -64,15 +80,29 @@ public class AdvertisementManager {
     }
 
     private void checkSet(List<Advertisement> advList) {
+
+        int currentWeight = calcWeight(advList);
+        long currentPrice = calcPrice(advList);
         if (bestItems == null) {
-            if (calcWeight(advList) <= maxWeight) {
+            if (currentWeight <= maxWeight) {
+                //allSets.add(advList);
                 bestItems = advList;
-                bestPrice = calcPrice(advList);
+                bestPrice = currentPrice;
             }
         } else {
-            if (calcWeight(advList) <= maxWeight && calcPrice(advList) >= bestPrice) {
-                bestItems = advList;
-                bestPrice = calcPrice(advList);
+            if (currentWeight <= maxWeight) {
+                if (currentPrice > bestPrice) {
+                    bestItems = advList;
+                    bestPrice = currentPrice;
+                } else if (currentPrice == bestPrice) {
+                    if (currentWeight > calcWeight(bestItems)) {
+                        bestItems = advList;
+                    } else if (currentWeight == calcWeight(bestItems)) {
+                        if (advList.size() < bestItems.size()) {
+                            bestItems = advList;
+                        }
+                    }
+                }
             }
         }
     }

@@ -15,7 +15,7 @@ public class Advertisement {
         this.initialAmount = initialAmount;
         this.hits = hits;
         this.duration = duration;
-        this.amountPerOneDisplaying = initialAmount/hits;
+        this.amountPerOneDisplaying = (hits > 0) ? initialAmount/hits : 0;
     }
 
     public String getName() {
