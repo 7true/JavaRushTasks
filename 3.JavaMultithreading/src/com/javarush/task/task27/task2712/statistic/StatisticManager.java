@@ -16,7 +16,6 @@ public class StatisticManager {
     private static StatisticManager instance;
     private StatisticStorage statisticStorage;
 
-    private Set cooks = new HashSet();
     private StatisticManager() {
         this.statisticStorage = new StatisticStorage();
     }
@@ -28,16 +27,9 @@ public class StatisticManager {
         return instance;
     }
 
-    public Set getCooks() {
-        return cooks;
-    }
 
     public void register(EventDataRow data) {
         statisticStorage.put(data);
-    }
-
-    public void register(Cook cook) {
-        cooks.add(cook);
     }
 
     public Map<String, Long> getRevenuePerDay() {

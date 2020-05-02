@@ -8,7 +8,6 @@ import com.javarush.task.task27.task2712.statistic.StatisticManager;
 import com.javarush.task.task27.task2712.statistic.event.NoAvailableVideoEventDataRow;
 
 import java.io.IOException;
-import java.util.Observable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,16 +15,15 @@ import java.util.logging.Logger;
 public class Tablet {
     private static Logger logger = Logger.getLogger(Tablet.class.getName());
     private final int number;
-    private LinkedBlockingQueue<Order> orderQueue = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<Order> queue = new LinkedBlockingQueue<>();
 
-    public Tablet(int number, LinkedBlockingQueue orderQueue) {
+    public Tablet(int number) {
         this.number = number;
-        this.setOrderQueue(orderQueue);
 
     }
 
-    public void setOrderQueue(LinkedBlockingQueue<Order> orderQueue) {
-        this.orderQueue = orderQueue;
+    public void setQueue(LinkedBlockingQueue<Order> queue) {
+        this.queue = queue;
     }
 
     public Order createOrder() {
@@ -55,6 +53,7 @@ public class Tablet {
         if (!order.isEmpty()) {
             ConsoleHelper.writeMessage(order.toString());
             StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(order.getTotalCookingTime()));
+            queue.add(order);
             AdvertisementManager advertisementManager = new AdvertisementManager(order.getTotalCookingTime() * 60);
             try {
                 advertisementManager.processVideos();
@@ -65,7 +64,7 @@ public class Tablet {
 //            notifyObservers(order);
 
             try {
-                orderQueue.put(order);
+                queue.put(order);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

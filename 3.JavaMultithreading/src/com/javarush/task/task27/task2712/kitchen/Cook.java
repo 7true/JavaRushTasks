@@ -11,15 +11,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Cook  extends Observable implements Runnable {
     private String name;
     private boolean busy;
-    private LinkedBlockingQueue<Order> orderQueue = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<Order> queue = new LinkedBlockingQueue<>();
 
-    public Cook(String name, LinkedBlockingQueue<Order> orderQueue) {
+    public Cook(String name) {
         this.name = name;
-        this.setOrderQueue(orderQueue);
     }
 
-    public void setOrderQueue(LinkedBlockingQueue<Order> orderQueue) {
-        this.orderQueue = orderQueue;
+    public void setQueue(LinkedBlockingQueue<Order> queue) {
+        this.queue = queue;
     }
 
     public boolean isBusy() {
@@ -47,16 +46,13 @@ public class Cook  extends Observable implements Runnable {
         Thread daemonTread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Set<Cook> cooks = StatisticManager.getInstance().getCooks();
                 while (true) {
-                    if (!orderQueue.isEmpty()) {
-                        for (Cook cook : cooks) {
-                            if (!cook.isBusy()) {
-                                try {
-                                    cook.startCookingOrder(orderQueue.poll());
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+                    if (!queue.isEmpty()) {
+                        if (!isBusy()) {
+                            try {
+                                startCookingOrder(queue.poll());
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
