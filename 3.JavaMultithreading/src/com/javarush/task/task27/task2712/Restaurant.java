@@ -8,22 +8,26 @@ import com.javarush.task.task27.task2712.statistic.StatisticManager;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Restaurant {
     private final static int ORDER_CREATING_INTERVAL = 100;
+    private final static LinkedBlockingQueue<Order> orderQueue = new LinkedBlockingQueue<>();
     public static void main(String[] args) throws ParseException {
 //        Tablet tablet = new Tablet(5);
 //        tablet.createOrder();
-        Cook cook = new Cook("Amigo");
-        Cook cook2 = new Cook("Sanya");
+
+        Cook cook = new Cook("Amigo", orderQueue);
+        Cook cook2 = new Cook("Sanya", orderQueue);
         StatisticManager.getInstance().register(cook);
         StatisticManager.getInstance().register(cook2);
         List<Tablet> tabletList = new ArrayList<>();
+        OrderManager orderManager = new OrderManager();
         for (int i = 0; i < 5; i++) {
-            Tablet tablet = new Tablet(i);
+            Tablet tablet = new Tablet(i,orderQueue);
             tabletList.add(tablet);
-            tablet.addObserver(cook);
-            tablet.addObserver(cook2);
+//            tablet.addObserver(orderManager);
+//            tablet.addObserver(orderManager);
         }
         Waiter waiter = new Waiter();
 

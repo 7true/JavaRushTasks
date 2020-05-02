@@ -9,14 +9,23 @@ import com.javarush.task.task27.task2712.statistic.event.NoAvailableVideoEventDa
 
 import java.io.IOException;
 import java.util.Observable;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Tablet extends Observable {
+public class Tablet {
     private static Logger logger = Logger.getLogger(Tablet.class.getName());
     private final int number;
-    public Tablet(int number) {
+    private LinkedBlockingQueue<Order> orderQueue = new LinkedBlockingQueue<>();
+
+    public Tablet(int number, LinkedBlockingQueue orderQueue) {
         this.number = number;
+        this.setOrderQueue(orderQueue);
+
+    }
+
+    public void setOrderQueue(LinkedBlockingQueue<Order> orderQueue) {
+        this.orderQueue = orderQueue;
     }
 
     public Order createOrder() {
@@ -52,8 +61,14 @@ public class Tablet extends Observable {
             } catch (NoVideoAvailableException noVideo) {
                 logger.log(Level.INFO, "No video is available for the order " + order);
             }
-            setChanged();
-            notifyObservers(order);
+//            setChanged();
+//            notifyObservers(order);
+
+            try {
+                orderQueue.put(order);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

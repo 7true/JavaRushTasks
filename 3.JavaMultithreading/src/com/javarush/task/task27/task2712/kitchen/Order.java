@@ -4,11 +4,14 @@ import com.javarush.task.task27.task2712.ConsoleHelper;
 import com.javarush.task.task27.task2712.Tablet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
+
+
     private final Tablet tablet;
-    protected List<Dish> dishes;
+    protected List<Dish> dishes;// = new ArrayList<>();
 
     public Order(Tablet tablet) throws IOException {
         this.tablet = tablet;
@@ -20,6 +23,9 @@ public class Order {
         return dishes;
     }
 
+    public Tablet getTablet() {
+        return tablet;
+    }
     public int getTotalCookingTime() {
         int cookingTime = 0;
         for (Dish d : dishes) {
