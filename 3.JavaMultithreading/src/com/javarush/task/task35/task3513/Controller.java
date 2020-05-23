@@ -7,6 +7,7 @@ public class Controller extends KeyAdapter {
     private static final int WINNING_TILE = 2048;
     Model model = new Model();
     View view;
+
     public Controller(Model model) {
         this.model = model;
         view = new View(this);
@@ -20,6 +21,9 @@ public class Controller extends KeyAdapter {
         return model.score;
     }
 
+    public View getView() {
+        return view;
+    }
     public void resetGame() {
         model.score = 0;
         model.maxTile = 0;
@@ -49,6 +53,12 @@ public class Controller extends KeyAdapter {
                     break;
                 case KeyEvent.VK_DOWN:
                     model.down();
+                    break;
+                case KeyEvent.VK_Z:
+                    model.rollback();
+                    break;
+                case KeyEvent.VK_R:
+                    model.randomMove();
                     break;
             }
         }

@@ -2,6 +2,7 @@ package com.javarush.task.task35.task3513;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Model {
     private static final int FIELD_WIDTH = 4;
@@ -11,6 +12,9 @@ public class Model {
     public Model() {
         resetGameTiles();
     }
+    private Stack previousStates = new Stack();
+    private Stack previousScores = new Stack();
+    private boolean isSaveNeeded = true;
 
     public Tile[][] getGameTiles() {
         return gameTiles;
@@ -82,6 +86,9 @@ public class Model {
     }
 
     protected void left() {
+        if (isSaveNeeded == true) {
+            saveState(gameTiles);
+        }
         boolean needAddTile = false;
         for (int i = 0; i < FIELD_WIDTH; i++) {
             boolean compressed = compressTiles(gameTiles[i]);
@@ -95,6 +102,7 @@ public class Model {
     }
 
     protected void down() {
+        saveState(gameTiles);
         gameTiles = rotateClockwise(gameTiles);
         left();
         for (int i = 0; i < 3; i++) {
@@ -103,6 +111,7 @@ public class Model {
     }
 
     protected void right() {
+        saveState(gameTiles);
         for (int i = 0; i < 2; i++) {
             gameTiles = rotateClockwise(gameTiles);
         }
@@ -114,6 +123,7 @@ public class Model {
     }
 
     protected void up() {
+        saveState(gameTiles);
         for (int i = 0; i < 3; i++) {
             gameTiles = rotateClockwise(gameTiles);
         }
@@ -148,6 +158,44 @@ public class Model {
             }
         }
         return canMove;
+    }
+
+    private void saveState(Tile[][] tiles) {
+        //Tile[][]temp = tiles.clone();
+        Tile[][] temp = new Tile[FIELD_WIDTH][FIELD_WIDTH];
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles.length; j++) {
+                temp[i][j] = new Tile(tiles[i][j].value);
+            }
+        }
+        previousScores.push(score);
+        previousStates.push(temp);
+        isSaveNeeded = false;
+    }
+
+    public void rollback() {
+        if (!previousStates.isEmpty() && !previousScores.isEmpty()) {
+            gameTiles = (Tile[][]) previousStates.pop();
+            score = (int) previousScores.pop();
+        }
+    }
+
+    void randomMove() {
+        int n = (int) ((Math.random()*100) % 4);
+        switch (n) {
+            case 0:
+                left();
+                break;
+            case 1:
+                right();
+                break;
+            case 2:
+                up();
+                break;
+            case 3:
+                down();
+                break;
+        }
     }
 
 }
