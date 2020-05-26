@@ -1,8 +1,6 @@
 package com.javarush.task.task35.task3513;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Model {
     private static final int FIELD_WIDTH = 4;
@@ -12,8 +10,8 @@ public class Model {
     public Model() {
         resetGameTiles();
     }
-    private Stack previousStates = new Stack();
-    private Stack previousScores = new Stack();
+    private Stack <Tile[][]> previousStates = new Stack();
+    private Stack <Integer> previousScores = new Stack();
     private boolean isSaveNeeded = true;
 
     public Tile[][] getGameTiles() {
@@ -198,4 +196,42 @@ public class Model {
         }
     }
 
+    public boolean hasBoardChanged() {
+        int thisWeight = 0;
+        for (int i = 0; i < FIELD_WIDTH; i++) {
+            for (int j = 0; j < FIELD_WIDTH; j++) {
+                thisWeight += gameTiles[i][j].value;
+            }
+        }
+
+        int weightFromStack = 0;
+        Tile[][]temp = (Tile[][]) previousStates.peek();
+        for (int i = 0; i < FIELD_WIDTH; i++) {
+            for (int j = 0; j < FIELD_WIDTH; j++) {
+                weightFromStack += temp[i][j].value;
+            }
+        }
+        return thisWeight != weightFromStack ? true:false;
+    }
+
+    public MoveEfficiency getMoveEfficiency(Move move) {
+        MoveEfficiency moveEfficiency;
+        move.move();
+        if (!hasBoardChanged()) {
+            moveEfficiency = new MoveEfficiency(-1, 0, move);
+        } else {
+            moveEfficiency = new MoveEfficiency(getEmptyTiles().size(), score, move);
+            rollback();
+        }
+        return moveEfficiency;
+    }
+
+    public void autoMove() {
+        PriorityQueue<MoveEfficiency> priorityQueue = new PriorityQueue<>(4, Collections.reverseOrder());
+            priorityQueue.offer(getMoveEfficiency(() -> left()));
+            priorityQueue.offer(getMoveEfficiency(() -> right()));
+            priorityQueue.offer(getMoveEfficiency(() -> up()));
+            priorityQueue.offer(getMoveEfficiency(() -> down()));
+            priorityQueue.peek().getMove().move();
+    }
 }
