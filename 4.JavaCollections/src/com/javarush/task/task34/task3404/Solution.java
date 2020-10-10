@@ -26,7 +26,7 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        solution.recurse("sin(2*(-5+1.5*4)+28)", 0); //expected output 0.5 6
+        solution.recurse("0.305", 0); //expected output 0.5 6
     }
 
     private boolean isNumber(String token) {
@@ -94,16 +94,19 @@ public class Solution {
                 double firstOperand = stack.pop();
                 stack.push(Math.pow(firstOperand, secondOperand));
             } else if (token.equals("s")) {
-                double firstOperand = stack.pop();
-                stack.push(Math.sin(Math.toRadians(firstOperand)));
+                double operand = stack.pop();
+                double radians = Math.toRadians(operand);
+                stack.push(Math.round(Math.sin(radians) * 100.0) / 100.0);
             }
             else if (token.equals("c")) {
-                double firstOperand = stack.pop();;
-                stack.push(Math.cos(firstOperand));
+                double operand = stack.pop();
+                double radians = Math.toRadians(operand);
+                stack.push(Math.round(Math.cos(radians) * 100.0) / 100.0);
             }
             else if (token.equals("t")) {
-                double firstOperand =  stack.pop();;
-                stack.push(Math.tan(firstOperand));
+                double operand = stack.pop();
+                double radians = Math.toRadians(operand);
+                stack.push(Math.round(Math.tan(radians) * 100.0) / 100.0);
             }
             else {
                 System.out.print("Push\t\t");
