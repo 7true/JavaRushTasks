@@ -19,14 +19,14 @@ public class Solution {
     private Stack<String> StackOperations = new Stack<String>();
     private Stack<String> StackRPN = new Stack<String>();
     private Stack<String> stackAnswer = new Stack<String>();
-
+    private Stack<Integer> stackParentheses = new Stack<Integer>();
     public Solution() {
         //don't delete
     }
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        solution.recurse("0.305", 0); //expected output 0.5 6
+        solution.recurse("(2+1)*(6-4)", 0); //expected output 0.5 6
     }
 
     private boolean isNumber(String token) {
@@ -142,11 +142,12 @@ public class Solution {
         Stack<String> operations = new Stack<>();
         ArrayList<String> output = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(exp, FUNCTIONS_STRING + OPERATORS + SEPARATOR  + "()", true);
-        System.out.println(exp);
-        int indexLastOpen = exp.indexOf("(");
-        int indexfirstClose = exp.lastIndexOf(")");
-        if (indexLastOpen == -1) {
+        //System.out.println(exp);
+        int indexOpen = exp.indexOf("(");
+        int indexClose = exp.indexOf(")");
+        if (indexOpen == -1) {
             System.out.println("calc nested exp with RPN");
+            System.out.println(exp);
             output.clear();
             while (st.hasMoreTokens()) {
                 String token = st.nextToken();
@@ -179,8 +180,39 @@ public class Solution {
             System.out.println("*********");
             return evalRPN(output);
         } else {
-            String substrToRPN = exp.substring(indexLastOpen + 1, indexfirstClose);
-            String expression = exp.substring(0, indexLastOpen) + calcRPN(substrToRPN) + exp.substring(indexfirstClose + 1);
+            String substrToRPN = null;
+            int indexToken = 0;
+            while (st.hasMoreTokens()) {
+                String token = st.nextToken();
+                if (token.equals("(")) {
+                    stackParentheses.push(indexToken);
+                    indexOpen = indexToken;
+                }
+                if (token.equals(")")) {
+                    substrToRPN = exp.substring(stackParentheses.pop(), indexToken+1);
+                    indexClose = indexToken;
+                }
+                ++indexToken;
+            }
+            String expression = exp.substring(0, indexOpen) + calcRPN(substrToRPN) + exp.substring(indexClose);
+            return calcRPN(substrToRPN);
+
+            /*String substrToRPN = exp.substring(indexOpen, indexClose+1);
+            System.out.println(substrToRPN);
+            String expression = null;
+            if (substrToRPN.contains(")")) {
+                indexOpen = substrToRPN.indexOf("(");
+                indexClose = substrToRPN.indexOf(")");
+                substrToRPN = substrToRPN.substring(indexOpen+1, indexClose);
+            }
+
+            expression = exp.substring(0, indexOpen) + calcRPN(substrToRPN) + exp.substring(indexClose+1);
+
+            if (isNumber(substrToRPN) && expression.contains("(")) {
+                expression = exp.substring(indexClose+2);
+            }*/
+
+
 //            if (exp.substring(0,1).equals("s")) {
 //                expression = exp.substring(0,1) + substrToRPN;
 //                System.out.println(expression);
@@ -190,15 +222,22 @@ public class Solution {
 //                expression = "s" + expression;
 //            }
 //            calcRPN(expression);
-            System.out.println(expression);
-            return calcRPN(expression);
+            //System.out.println(expression);
+            //return calcRPN(expression);
         }
     }
 
     public void recurse(final String expression, int countOperation) {
         //implement
-        String expressionL = expression.replace(" ", "")
-                .replace("-", "0-").replace("sin", "s").replace("cos","c")
+        String expressionL = expression.replace(" ", "").replace("(-", "(0-")
+                .replace(",-", ",0-").replace("sin", "s").replace("cos","c")
+                .replace("tan", "t");;
+        if (expressionL.charAt(0) == '-') {
+            expressionL = "0" + expression;
+        }
+
+        /*String expressionL = expression.replace(" ", "")
+                .replace("(-", "(0-").replace(",-", ",0-").replace("sin", "s").replace("cos","c")
                 .replace("tan", "t");
        /* String expressionL = expression.replace(" ", "").replace("(-", "(0-")
                 .replace(",-", ",0-");*/
