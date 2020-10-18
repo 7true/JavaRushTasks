@@ -16,11 +16,16 @@ public class Solution {
             }
         }
         System.out.println(str2);
-        //int numRings = 3;
-        //moveRing('A', 'B', 'C', numRings);
+        int numRings = 8;
+        moveRing('A', 'B', 'C', numRings);
     }
 
     public static void moveRing(char a, char b, char c, int numRings) {
         //напишите тут ваш код
+        if (numRings > 0) {
+            moveRing(a, c, b, numRings - 1);
+            System.out.println("from "  + a + " to " + b);
+            moveRing(c, b, a, numRings - 1);
+        }
     }
 }
